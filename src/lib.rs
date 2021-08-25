@@ -46,3 +46,44 @@ mod macro_tests {
         println!("{}", detuple_result);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    macro_rules! test_capture {
+        ($e:expr) => {println!("Got expression")};
+        ($s:stmt;) => {println!("Got statement")};
+        ($b:block) => {println!("Got block")};
+        ($i:ident) => {println!("Got identifier")}
+    }
+
+    macro_rules! capture_advance {
+        (let $id:ident = $exprs:expr;) => {
+            let $id = $exprs;
+            let _temp = $id +1;
+            println!("matched expression, _temp = {}", _temp);
+        }
+    }
+
+    macro_rules! capture_token_tree {
+        ($tt1:tt + $tt2:tt) => {
+            println!("Got token tree tt1={:?}",stringify!($tt1))
+        }
+    }
+
+    #[test]
+    fn test_capture() {
+        test_capture!(let i= 0;);
+        test_capture! {
+            let i =1;
+        }
+    }
+
+    #[test]
+    fn test_capture_advance() {
+        capture_advance! {
+            let i=1;
+        };
+        capture_token_tree!((1+1)+(2+2))
+    }
+}
