@@ -2,6 +2,7 @@
 `with`-like macro for Rust, which helps narrow down lifetime of a variable.
 
 ## Usages
+Installation: add `accompany = "0.1.0"` to your `Cargo.toml`.
 
 Examples:
 ```rust
