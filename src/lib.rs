@@ -11,6 +11,7 @@ macro_rules! bound {
 
 #[cfg(test)]
 mod macro_tests {
+    #[derive(Copy, Clone)]
     struct A {
         pub field: u8,
         pub field_u16: u16,
@@ -30,25 +31,44 @@ mod macro_tests {
         };
         assert_eq!(4, simple_result);
 
+        let simple_result = bound! {
+            with mut i = 3 => {
+                i += 1;
+                let m = i+1;
+                m
+            }
+        };
+        assert_eq!(5, simple_result);
+
         let a = A {
             field: 1,
             field_u16: 2,
         };
         let destruct_result = bound! {
-            with A { field: i, field_u16: _j } = a =>{
+            with A { field: i, field_u16: _j } = a.clone() =>{
                 let m = i+1;
                 m
             }
         };
         assert_eq!(2, destruct_result);
 
-        let detuple_result = bound! {
-            with (i,_j)=(4,3) =>{
+        let destruct_result = bound! {
+            with A { field: mut i, field_u16: _j } = a =>{
+                i += 1;
                 let m = i+1;
                 m
             }
         };
-        assert_eq!(5, detuple_result);
+        assert_eq!(3, destruct_result);
+
+        let detuple_result = bound! {
+            with (mut i,_j)=(4,3) =>{
+                i += 1;
+                let m = i+1;
+                m
+            }
+        };
+        assert_eq!(6, detuple_result);
     }
 
     #[test]
