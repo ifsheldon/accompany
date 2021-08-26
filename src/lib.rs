@@ -1,4 +1,4 @@
-macro_rules! bound {
+#[macro_export] macro_rules! bound {
     (with $($patterned_identifier:pat = $expression:expr) , + =>$bound_code:block)=>{
        {
            // patterned_identifier includes examples like tuple destruction, struct destruction and conventional identifier
