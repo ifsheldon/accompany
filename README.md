@@ -30,7 +30,31 @@ let i = bound!{
         let m = j + k;
         m
     }
+};
+```
+
+Also, destruction of structs and tuples are supported.
+```rust
+let tup = (1,2);
+let i = bound!{
+    with (i,j) = tuple =>{
+        let m= i+j;
+        m
+    }
+};
+
+pub struct A{
+    pub field: u8,
 }
+
+let a = A{ field : 0};
+let i = bound!{
+    with A {field: mut i} = a => {
+        i += 1;
+        let m = i + 1;
+        m
+    }
+};
 ```
 
 This is nothing fancy, but it helps to keep track of and to limit the lifetime of a variable of importance.
