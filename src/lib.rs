@@ -1,5 +1,12 @@
 #[macro_export] macro_rules! bound {
-    (with $($patterned_identifier:pat = $expression:expr) , + =>$bound_code:block)=>{
+    (with $($patterned_identifier:pat = $expression:expr) , + =>$bound_code:block) => {
+       {
+           // patterned_identifier includes examples like tuple destruction, struct destruction and conventional identifier
+           $(let $patterned_identifier = $expression;)+
+           {$bound_code}
+       }
+    };
+    (with $($patterned_identifier:pat = $expression:expr) , + =>$bound_code:expr) => {
        {
            // patterned_identifier includes examples like tuple destruction, struct destruction and conventional identifier
            $(let $patterned_identifier = $expression;)+
@@ -85,6 +92,20 @@ mod macro_tests {
             with B{ field: i} = a, B{ field: j}= b =>{
                 i+j
             }
+        };
+        assert_eq!(result, 3);
+    }
+
+    #[test]
+    fn test_with_bound_multiple_and_expression() {
+        let result = bound! {
+            with i = 1, j=2, k=3 => i + j +k
+        };
+        assert_eq!(result, 6);
+        let a = B { field: 1 };
+        let b = B { field: 2 };
+        let result = bound! {
+            with B{ field: i} = a, B{ field: j} = b => i+j
         };
         assert_eq!(result, 3);
     }

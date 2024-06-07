@@ -2,7 +2,7 @@
 `with`-like macro for Rust, which helps narrow down lifetime of a variable.
 
 ## Usages
-Installation: add `accompany = "0.1.0"` to your `Cargo.toml`.
+Installation: add `accompany = "0.2.0"` to your `Cargo.toml`.
 
 Examples:
 ```rust
@@ -20,6 +20,13 @@ let i ={
     let j = 1;
     let m = j + 1;
     m
+};
+```
+
+Or simply
+```rust
+let i = bound!{
+    with j = 1 => j + 1
 };
 ```
 
